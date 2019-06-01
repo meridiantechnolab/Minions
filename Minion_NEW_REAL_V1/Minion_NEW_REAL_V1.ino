@@ -281,7 +281,6 @@ void UltraSonicActivation() {
       uS = sonar.ping_cm();
       delay(50);
    }
-   delay(600);
 }
 
 // Hands
@@ -342,9 +341,11 @@ void Hands() {
 void Happy() {
    MinionInit();
    UltraSonicActivation();
+   delay(500);
    
    // Begining
-   RobotMoveForwardCM(50);   
+   RobotMoveForwardCM(50);  
+   RobotMoveForwardCM(50);    
    RobotStop(500);
    HandsUp();
    pause(500);
