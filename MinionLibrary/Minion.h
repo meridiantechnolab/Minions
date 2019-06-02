@@ -12,13 +12,14 @@ class Minion {
   public:
 
 
-    Minion(int _lHandDown, int _rHandDown, int _lHandUp, int _rHandUp, int _lHandForward, int _rHandForward, float _G_Right, float _G_Left, float K_Forward, float K_Backwards);
+    Minion(int _lHandDown, int _rHandDown, int _lHandUp, int _rHandUp, int _lHandForward, int _rHandForward, float _G_Right, float _G_Left, float K_Forward, float K_Backward);
 
     void start();
 
     void pause(int interval);
-    void MotorStop(int iTime);
-    void RobotMoveForwardSpeed(int SpeedLeft, int SpeedRight, int iTime);
+    void RobotStop(int iTime);
+    void RobotMoveForwardCM(int iCM);
+    void RobotMoveBackwardCM(int iCM);
 
     //Left Hand Control
     void LeftHandUp();
