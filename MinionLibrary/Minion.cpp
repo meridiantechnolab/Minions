@@ -1,31 +1,30 @@
 #include "Minion.h"
 #include <ServoDriver.h>
 #include <NewPing.h>
-// #include <MPU6050_tockn.h>
-// #include "../ServoCOntrol/ServoDriver.h"
+#include <Wire.h>
+#include <MPU6050_tockn.h>
 
 ServoDriver pwm = ServoDriver();
 
 unsigned long previousMillis = 0;
 
+MPU6050 mpu6050(Wire);
 
 
-// Could define these variables when instatiating the object minion in the main code
-int TRIGGER_PIN = 11;
-int ECHO_PIN = 12;
+int TRIGGER_PIN = 8;
+int ECHO_PIN = 9;
 int MAX_DISTANCE = 200;
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 
 // Motor A
-int MotorDirA  = 8;
-int MotorPWMA  = 9;
+int MotorDirA  = 12;
+int MotorPWMA  = 11;
 
 // Motor B
 int MotorDirB  = 7;
 int MotorPWMB  = 6;
 
-// Everything above this and below the comment that talks about this, can be put into instatiation of the minion object in the main code
-
+int LED_PIN = 5;
 
 
 // Tells the Servo Motors how far to turn
@@ -60,6 +59,9 @@ Minion::Minion(int _lHandDown, int _rHandDown, int _lHandUp, int _rHandUp, int _
 
 
 void Minion::start(){
+  //Making the LED off so we know that the robot is not ready
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW);
 
   // DC Motors
   pinMode(MotorDirA, OUTPUT);
@@ -75,7 +77,25 @@ void Minion::start(){
   pwm.setPWMFreq(50);
   HandsDown();
   delay(500);
+
+  //Gyro
+  Wire.begin();
+  mpu6050.begin();
+  mpu6050.calcGyroOffsets(true);
+
+  //LED on saying that the robot is ready
+  digitalWrite(LED_PIN, HIGH);
 }
+
+// void Minion::UltraSonicActivation() {
+//    int uS = sonar.ping_cm();
+//    delay(50);
+//    while ((uS == 0) || (uS > 30)) {
+//       uS = sonar.ping_cm();
+//       delay(50);
+//    }
+//    Serial.println("Start dancing");
+// }
 
 void Minion::pause(int interval){
     int uS = sonar.ping_cm();
@@ -102,21 +122,20 @@ void Minion::RobotStop(int iTime) {
    pause(iTime);
 }
 
-
 void Minion::RobotMoveForwardCM(int iCM) {
    int iTime = iCM * K_Forward;
    digitalWrite(MotorDirA, HIGH);
    analogWrite(MotorPWMA, 200);
    digitalWrite(MotorDirB, HIGH);
-   analogWrite(MotorPWMB, 170);
+   analogWrite(MotorPWMB, 200);
    pause(iTime);
 }
-void Minion::RobotMoveBackwardCM(int iCM) {
+void Minion::RobotMoveBackCM(int iCM) {
    int iTime = iCM * K_Backward;
-   digitalWrite(MotorDirA, HIGH);
+   digitalWrite(MotorDirA, LOW);
    analogWrite(MotorPWMA, 200);
-   digitalWrite(MotorDirB, HIGH);
-   analogWrite(MotorPWMB, 170);
+   digitalWrite(MotorDirB, LOW);
+   analogWrite(MotorPWMB, 200);
    pause(iTime);
 }
 
@@ -157,4 +176,54 @@ void Minion::HandsDown() {
 void Minion::HandsForward() {
   LeftHandForward();
   RightHandForward();
+}
+
+//Turn Robot to a gyro angle
+void Minion::GyroTurnRightDegrees(int iDegrees) {
+  iDegrees = iDegrees * G_Right;
+  float StartAngle = 0;
+  float Angle = 0;
+  float diff = 0;
+
+  mpu6050.update();
+  StartAngle = mpu6050.getAngleZ();
+  Angle = StartAngle;
+
+  digitalWrite(MotorDirA, LOW);
+  analogWrite(MotorPWMA, 200);
+  digitalWrite(MotorDirB, HIGH);
+  analogWrite(MotorPWMB, 200);
+
+  while ((Angle - StartAngle) < iDegrees) {
+     mpu6050.update();
+     Angle = mpu6050.getAngleZ();
+     diff = Angle - StartAngle;
+  }
+  RobotStop(100);
+
+}
+
+//Turn Robot to a gyro angle
+void Minion::GyroTurnLeftDegrees(int iDegrees) {
+  iDegrees = iDegrees * G_Left;
+  float StartAngle = 0;
+  float Angle = 0;
+  float diff = 0;
+
+  mpu6050.update();
+  StartAngle = mpu6050.getAngleZ();
+  Angle = StartAngle;
+
+  digitalWrite(MotorDirA, HIGH);
+  analogWrite(MotorPWMA, 200);
+  digitalWrite(MotorDirB, LOW);
+  analogWrite(MotorPWMB, 200);
+
+  while ((Angle - StartAngle) > iDegrees) {
+     mpu6050.update();
+     Angle = mpu6050.getAngleZ();
+     diff = Angle - StartAngle;
+  }
+  RobotStop(100);
+
 }

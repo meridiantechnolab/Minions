@@ -16,10 +16,12 @@ class Minion {
 
     void start();
 
+    // void UltraSonicActivation();
+
     void pause(int interval);
     void RobotStop(int iTime);
     void RobotMoveForwardCM(int iCM);
-    void RobotMoveBackwardCM(int iCM);
+    void RobotMoveBackCM(int iCM);
 
     //Left Hand Control
     void LeftHandUp();
@@ -35,6 +37,10 @@ class Minion {
     void HandsUp();
     void HandsDown();
     void HandsForward();
+
+    //Turning
+    void GyroTurnRightDegrees(int iDegrees);
+    void GyroTurnLeftDegrees(int iDegrees);
 
   private:
 
