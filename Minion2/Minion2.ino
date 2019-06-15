@@ -8,11 +8,7 @@
 
 #include <NewPing.h>
 #include <ServoDriver.h>
-#include <RH_ASK.h>
 #include <SPI.h>
-
-// Radio reciever - pin 3, transmitter - pin 4
-RH_ASK radio(2000, 3, 4);
 
 // Servo control
 ServoDriver pwm = ServoDriver();
@@ -32,29 +28,42 @@ const int MotorPWMA  = 11;
 const int MotorDirB  = 7;
 const int MotorPWMB  = 6;
 
+// Gyro
+MPU6050 mpu6050(Wire);
+
+// Light Sensor
+int LightSensorPin = A3;
+int LightSensor;
+
+// LED
+int LED_PIN = 5;
+
+// will store last time pause was updated
+unsigned long previousMillis = 0;        
+
 // Turn and move calibration
 //At home
-const float K_Right = 1750 / 180;          // Turn right 1 degree, msec
-const float K_Left  = 1750 / 180;          // Turn left 1 degree, msec
+const float G_Right = 1.70; // Turn right 1 degree, gyro angle, would ssay 340/180 is 1 (This number [1.88] was derived by finding the angle at which it actually turned 180 and dividing it by 180)
+const float G_Left  = -1.70; // Turn left 1 degree, gyro angle (This number [1.88] was derived by finding the angle at which it actually turned 180 and dividing it by 180)
 const float K_Forward  = 1770/ 100;        // Move forward 1 cm, msec
 const float K_Backwards  = 1785 / 100;     // Move backwards 1 cm, msec
 
 
 //Comp
-/*const float K_Right = 1800 / 200;          // Turn right 1 degree, msec
-const float K_Left  = 1500 / 200;          // Turn left 1 degree, msec
+/*const float G_Right = 1.70; // Turn right 1 degree, gyro angle, would ssay 340/180 is 1 (This number [1.88] was derived by finding the angle at which it actually turned 180 and dividing it by 180)
+const float G_Left  = -1.70; // Turn left 1 degree, gyro angle (This number [1.88] was derived by finding the angle at which it actually turned 180 and dividing it by 180)
 const float K_Forward  = 1770/ 100;        // Move forward 1 cm, msec
 const float K_Backwards  = 1785 / 100;     // Move backwards 1 cm, msec
 */
+
 // Turn calibration
 void TurnCalibration() {
-   HandsDown();
    UltraSonicActivation();
-   delay(1000);
-   RobotTurnRight(200, 1600);
-   RobotStop(1000);
-   RobotTurnLeft(200, 1500);
-   RobotStop(1000);
+   pause(1000);
+   RobotTurnRightDegrees(340);
+   pause(1000);
+   RobotTurnLeftDegrees(-340);
+   pause(1000);
 }
 
 // Move calibration
@@ -67,13 +76,33 @@ void MoveCalibration() {
    RobotStop(1000);
 }
 
+//The function we use to check the ultrasonic values while driving
+void pause(int interval){
+    int uS = sonar.ping_cm();
+    unsigned long currentMillis = millis();
+    
+    while(currentMillis - previousMillis <= interval){ 
+      currentMillis = millis();
+      int uS = sonar.ping_cm();
+      if ((uS > 0) && (uS < 15)){
+        RobotStop(20);
+        
+        while ((uS > 0) && (uS < 15)){
+          uS = sonar.ping_cm();
+          delay(10);
+        }
+      }
+     }
+    previousMillis = currentMillis;
+   }
+
 // Move robot forward
 void RobotMoveForwardSpeed(int SpeedLeft, int SpeedRight, int iTime) {
    digitalWrite(MotorDirA, HIGH);
    analogWrite(MotorPWMA, SpeedLeft);
    digitalWrite(MotorDirB, HIGH);
    analogWrite(MotorPWMB, SpeedRight);
-   delay(iTime);
+   pause(iTime);
 }
 
 // Move robot back
@@ -82,78 +111,96 @@ void RobotMoveBackSpeed(int SpeedLeft, int SpeedRight, int iTime) {
    analogWrite(MotorPWMA, SpeedLeft);
    digitalWrite(MotorDirB, LOW);
    analogWrite(MotorPWMB, SpeedRight);
-   delay(iTime);
+   pause(iTime);
 }
 
 // Move robot forward cm
 void RobotMoveForwardCM(int iCM) {
-   RobotMoveForwardSpeed(200, 190, K_Forward * iCM);
+   RobotMoveForwardSpeed(200, 170, K_Forward * iCM);
 }
 
 // Move robot back cm
 void RobotMoveBackCM(int iCM) {
-   RobotMoveBackSpeed(200, 160, K_Backwards * iCM);
+   RobotMoveBackSpeed(200, 170, K_Backwards * iCM);
 }
 
-// Move robot forward
-void RobotMoveForward(int iSpeed, int iTime) {
-   digitalWrite(MotorDirA, HIGH);
-   analogWrite(MotorPWMA, iSpeed);
-   digitalWrite(MotorDirB, HIGH);
-   analogWrite(MotorPWMB, iSpeed);
-   delay(iTime);
-}
+// Init
+void MinionInit() {
+   pinMode(LED_PIN, OUTPUT);
+   digitalWrite(LED_PIN, LOW);
+   Serial.begin(9600);
 
-// Move robot back
-void RobotMoveBack(int iSpeed, int iTime) {
-   digitalWrite(MotorDirA, LOW);
-   analogWrite(MotorPWMA, iSpeed);
-   digitalWrite(MotorDirB, LOW);
-   analogWrite(MotorPWMB, iSpeed);
-   delay(iTime); 
-}
-
-// Turn robot Left
-void RobotTurnLeft(int iSpeed, int iTime) {
-   digitalWrite(MotorDirA, LOW);
-   analogWrite(MotorPWMA, iSpeed);
-   digitalWrite(MotorDirB, HIGH);
-   analogWrite(MotorPWMB, iSpeed);
-   delay(iTime); 
+   Wire.begin();
+   mpu6050.begin();
+   mpu6050.calcGyroOffsets(true);
+   digitalWrite(LED_PIN, HIGH);
 }
 
 // Turn robot left degrees
 void RobotTurnLeftDegrees(int iDegrees) {
-   digitalWrite(MotorDirA, LOW);
-   analogWrite(MotorPWMA, 200);
-   digitalWrite(MotorDirB, HIGH);
-   analogWrite(MotorPWMB, 200);
-   delay(K_Left * iDegrees); 
-}
-
-// Turn robot right
-void RobotTurnRight(int iSpeed, int iTime) {
+   float StartAngle = 0;
+   float Angle = 0;
+   float diff = 0;
+   
+   mpu6050.update();
+   StartAngle = mpu6050.getAngleZ();
+   Angle = StartAngle;
+   
    digitalWrite(MotorDirA, HIGH);
-   analogWrite(MotorPWMA, iSpeed);
+   analogWrite(MotorPWMA, 200);
    digitalWrite(MotorDirB, LOW);
-   analogWrite(MotorPWMB, iSpeed);
-   delay(iTime);
+   analogWrite(MotorPWMB, 200);
+
+   while ((Angle - StartAngle) > iDegrees) {
+      mpu6050.update();
+      Angle = mpu6050.getAngleZ();
+      diff = Angle - StartAngle;
+   }
+   RobotStop(100);
 }
 
 // Turn robot right degrees
 void RobotTurnRightDegrees(int iDegrees) {
-   digitalWrite(MotorDirA, HIGH);
+   float StartAngle = 0;
+   float Angle = 0;
+   float diff = 0;
+   
+   mpu6050.update();
+   StartAngle = mpu6050.getAngleZ();
+   Angle = StartAngle;
+   
+   digitalWrite(MotorDirA, LOW);
    analogWrite(MotorPWMA, 200);
-   digitalWrite(MotorDirB, LOW);
+   digitalWrite(MotorDirB, HIGH);
    analogWrite(MotorPWMB, 200);
-   delay(K_Right * iDegrees);
+
+   while ((Angle - StartAngle) < iDegrees) {
+      mpu6050.update();
+      Angle = mpu6050.getAngleZ();
+      diff = Angle - StartAngle;
+   }
+   RobotStop(100);
+}
+
+//Turn Robot to a gyro angle
+void GyroTurnRightDegrees(int gDegrees) {
+  RobotTurnRightDegrees(gDegrees * G_Right);
+  Serial.println(gDegrees * G_Right);
+  Serial.println(G_Right);
+}
+
+//Turn Robot to a gyro angle
+void GyroTurnLeftDegrees(int gDegrees) {
+  RobotTurnLeftDegrees(gDegrees * G_Left);
+  Serial.println(gDegrees * G_Left);
+  Serial.println(G_Left);
 }
 
 // Stop robot
 void RobotStop(int iTime) {
    analogWrite(MotorPWMA, 0);
    analogWrite(MotorPWMB, 0);
-   delay(iTime); 
+   pause(iTime); 
 }
 
 // Right hand up
@@ -204,8 +251,6 @@ void HandsForward() {
    RightHandForward();
 }
 
-
-
 // Hands test
 void HandsTest() {
    HandsUp();
@@ -238,22 +283,6 @@ void UltraSonicActivation() {
       delay(50);
    }
    Serial.println("US: Start dancing");
-}
-
-// Radio activation
-void RadioActivation() {
-   uint8_t buf[5];
-   uint8_t buflen = 5;
-   String st = "     ";
-
-   while (st.substring(0, 5) != "start") {   
-      if (radio.recv(buf, &buflen))
-      {
-        st = (char*)buf;
-      }
-      delay(50);
-   }
-   Serial.println("RF: Start dancing");
 }
 
 // Hands
@@ -312,117 +341,119 @@ void Hands() {
 
 // Happy dance routine
 void Happy() {
+   MinionInit();
+   
    // Begining
    RobotMoveForwardCM(50);   
    RobotStop(500);
    HandsUp();
-   delay(500);
+   pause(500);
    HandsDown();
-   delay(500);
-   RobotTurnLeftDegrees(100);
+   pause(500);
+   GyroTurnLeftDegrees(90);
    RobotStop(500);
    HandsUp();
-   delay(500);
+   pause(500);
    HandsDown();
-   delay(500);
+   pause(500);
    RobotMoveForwardCM(30);     
    RobotStop(500);
    RightHandUp();
-   delay(500);
+   pause(500);
    LeftHandUp();
    RightHandDown();
-   delay(500);
+   pause(500);
    LeftHandDown();
    RightHandUp();
-   delay(500);
+   pause(500);
    LeftHandUp();
    RightHandDown();
-   delay(500);
+   pause(500);
    LeftHandDown();
-   delay(500);
-   RobotTurnRightDegrees(90);
+   pause(500);
+   GyroTurnRightDegrees(90);
    RobotStop(500);
    RobotMoveBackCM(50);
    RobotStop(500);
-   RobotTurnRightDegrees(90);
+   GyroTurnRightDegrees(90);
    RobotStop(100);
-   RadioActivation();
+   //BluetoothActivation();
    HandsUp();
-   delay(250);
-   RobotTurnRightDegrees(90);
+   pause(250);
+   GyroTurnRightDegrees(90);
    RobotStop(500);
    HandsDown();
-   RadioActivation();
+   //BluetoothActivation();
    RobotMoveForwardCM(50);  
    RobotStop(500);
    HandsUp();
-   delay(2000);
+   pause(2000);
    HandsDown();
-   delay(500);
+   pause(500);
    RobotMoveBackCM(50);
    RobotStop(100);
-   RadioActivation();
+   //BluetoothActivation();
 
    // Turns 7s
    HandsUp();
-   delay(500);
+   pause(500);
    HandsDown();
-   delay(500);
-   RobotTurnRightDegrees(90);
+   pause(500);
+   GyroTurnRightDegrees(90);
    RobotStop(1000);
    HandsUp();
-   delay(500);
+   pause(500);
    HandsDown();
-   delay(500);
-   RobotTurnRightDegrees(90);
+   pause(500);
+   GyroTurnRightDegrees(90);
    RobotStop(500);
 
    // Hands 23s
    Hands();
-   RadioActivation();
+   //Bluetooth Activation();
    
    // Final moves
    RobotMoveForwardCM(35);   
    RobotStop(500);
    HandsUp();
-   delay(500);
+   pause(500);
    HandsDown();
-   delay(1000);
+   pause(1000);
    RobotMoveBackCM(85);   
    RobotStop(500);
    HandsUp();
-   delay(500);
+   pause(500);
    HandsDown();
-   delay(1000);
+   pause(1000);
    RobotMoveForwardCM(35);   
    RobotStop(500);
    HandsUp();
-   delay(500);
+   pause(500);
    HandsDown();
-   delay(1000);
+   pause(1000);
 
    // 8 sec
-   RobotTurnLeftDegrees(100);
+   GyroTurnLeftDegrees(100);
    RobotStop(500);
    RightHandForward();
-   delay(500);
+   pause(500);
    LeftHandForward();
    RightHandDown();
-   delay(500);
+   pause(500);
    LeftHandDown();
    RightHandForward();
-   delay(500);
+   pause(500);
    LeftHandUp();
-   delay(500);
+   pause(500);
    RightHandUp();
    LeftHandForward();
-   delay(500);
+   pause(500);
    RightHandForward();
    LeftHandUp();
-   delay(500);
+   pause(500);
    HandsDown();
-   delay(500);
-   RobotTurnRightDegrees(100);
+   pause(500);
+   GyroTurnRightDegrees(100);
    RobotStop(500);
    
 }
@@ -437,20 +468,18 @@ void setup(){
    // Ultrasonic Sensor
    Serial.begin(9600);
 
-   // Radio receiver/transmitter
-   if (!radio.init()) Serial.println("init failed");
-
    // Servos
    pwm.begin();
    pwm.setPWMFreq(50);  // servos run at 50 Hz
    HandsDown();
 
-//   UltraSonicTest();
+// UltraSonicTest();
 
-//    UltraSonicActivation(); 
-//    TurnCalibration();
-//  MoveCalibration();
-   RadioActivation();
+// UltraSonicActivation(); 
+// TurnCalibration();
+// MoveCalibration();
+// BluetoothActivation();
+
    Happy();
 }
 

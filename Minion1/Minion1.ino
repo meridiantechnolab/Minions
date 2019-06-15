@@ -8,11 +8,7 @@
 
 #include <NewPing.h>
 #include <ServoDriver.h>
-#include <RH_ASK.h>
 #include <SPI.h>
-
-// Radio reciever - pin 3, transmitter - pin 4
-RH_ASK radio(2000, 3, 4);
 
 // Servo control
 ServoDriver pwm = ServoDriver();
@@ -32,20 +28,64 @@ const int MotorPWMA  = 9;
 const int MotorDirB  = 7;
 const int MotorPWMB  = 6;
 
-// Turn calibration, sec to turn 1 degree
-const float K_Right = 1700 / 180;
-const float K_Left  = 1300 / 180;
+// Gyro
+MPU6050 mpu6050(Wire);
+
+// Light Sensor
+int LightSensorPin = A3;
+int LightSensor;
+
+// LED
+int LED_PIN = 5;
+
+// Generally, you should use "unsigned long" for variables that hold time
+// The value will quickly become too large for an int to store
+unsigned long previousMillis = 0;        // will store last time LED was update
+
+// Turn and move calibration, sec to turn 1 degree
+const float G_Right = 1.70; // Turn right 1 degree, gyro angle, would ssay 340/180 is 1 (This number [1.88] was derived by finding the angle at which it actually turned 180 and dividing it by 180)
+const float G_Left  = -1.70; // Turn left 1 degree, gyro angle (This number [1.88] was derived by finding the angle at which it actually turned 180 and dividing it by 180)
+const float K_Forward  = 1770/ 100;        // Move forward 1 cm, msec
+const float K_Backwards  = 1785 / 100;     // Move backwards 1 cm, msec
 
 // Turn calibration
 void TurnCalibration() {
-   HandsDown();
-//   UltraSonicActivation();
-   delay(1000);
-   RobotTurnRight(200, 1700);
+   UltraSonicActivation();
+   pause(1000);
+   RobotTurnRightDegrees(340);
+   pause(1000);
+   RobotTurnLeftDegrees(-340);
+   pause(1000);
+}
+
+// Move calibration
+void MoveCalibration() {
+   UltraSonicActivation();
+   RobotMoveForwardSpeed(200, 170, 1770);
    RobotStop(1000);
-   RobotTurnLeft(200, 1300);
+   RobotMoveBackSpeed(200, 170, 1785);
    RobotStop(1000);
 }
+
+//The function we use to check the ultrasonic values while driving
+void pause(int interval){
+    int uS = sonar.ping_cm();
+    unsigned long currentMillis = millis();
+    
+    while(currentMillis - previousMillis <= interval){ 
+      currentMillis = millis();
+      int uS = sonar.ping_cm();
+      if ((uS > 0) && (uS < 15)){
+        RobotStop(20);
+        
+        while ((uS > 0) && (uS < 15)){
+          uS = sonar.ping_cm();
+          delay(10);
+        }
+      }
+     }
+    previousMillis = currentMillis;
+   }
 
 void setup(){
    // DC motors

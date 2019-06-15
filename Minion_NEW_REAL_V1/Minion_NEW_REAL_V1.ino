@@ -34,7 +34,7 @@ const int MotorPWMB  = 6;
 MPU6050 mpu6050(Wire);
 
 // Light Sensor
-int LightSensorPin = A3;
+int LightSensorPin = A0;
 int LightSensor;
 
 // LED
@@ -82,16 +82,22 @@ void MoveCalibration() {
 void pause(int interval){
     int uS = sonar.ping_cm();
     unsigned long currentMillis = millis();
+    int Colour = analogRead(LightSensorPin);
     
     while(currentMillis - previousMillis <= interval){ 
       currentMillis = millis();
       int uS = sonar.ping_cm();
+      int Colour = analogRead(LightSensorPin);
+      
       if ((uS > 0) && (uS < 15)){
         RobotStop(20);
-        
         while ((uS > 0) && (uS < 15)){
           uS = sonar.ping_cm();
           delay(10);
+        }
+      } else {
+        if (Colour > 990){
+          RobotMoveBackCM(45);
         }
       }
      }
