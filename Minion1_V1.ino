@@ -3,15 +3,6 @@
 //             LHD, RHD, LHU, RHU, LHF, RHF, G_R ,  G_L , K_F     , K_B
 Minion minion1(460, 105, 120, 470, 270, 275, 1.70, -1.70, 1770/100, 1785/100);
 
-void setup() {
-//  Happy(); 
-  minion1.start();
-  delay(1000);
-
-  
-  
-}
-
 void Hands() {
    minion1.HandsUp();
    minion1.pause(400);
@@ -67,9 +58,10 @@ void Hands() {
 
 void Happy() {
    minion1.start();
-//   minion1.UltraSonicActivation();
+   delay(600);
 
    // Begining
+   minion1.RobotMoveForwardCM(50);
    minion1.RobotMoveForwardCM(50);
    minion1.RobotStop(500);
    minion1.HandsUp();
@@ -184,12 +176,9 @@ void Happy() {
 
 }
 
-
+void setup() {
+  Happy();
+}
 
 void loop(){
-  minion1.RobotMoveForwardCM(50);
-  delay(1000);
-  minion1.GyroTurnRightDegrees(90);
-  delay(1000);
-  
 }

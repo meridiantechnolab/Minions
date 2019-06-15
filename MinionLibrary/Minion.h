@@ -16,8 +16,7 @@ class Minion {
 
     void start();
 
-    // void UltraSonicActivation();
-
+    void UltraSonicActivation();
     void pause(int interval);
     void RobotStop(int iTime);
     void RobotMoveForwardCM(int iCM);

@@ -11,8 +11,8 @@ unsigned long previousMillis = 0;
 MPU6050 mpu6050(Wire);
 
 
-int TRIGGER_PIN = 8;
-int ECHO_PIN = 9;
+int TRIGGER_PIN = 9;
+int ECHO_PIN = 8;
 int MAX_DISTANCE = 200;
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 
@@ -26,6 +26,8 @@ int MotorPWMB  = 6;
 
 int LED_PIN = 5;
 
+int LightSensorPin = A0;
+int LightSensor;
 
 // Tells the Servo Motors how far to turn
 int lHandDown;
@@ -85,31 +87,39 @@ void Minion::start(){
 
   //LED on saying that the robot is ready
   digitalWrite(LED_PIN, HIGH);
+
+  UltraSonicActivation();
 }
 
-// void Minion::UltraSonicActivation() {
-//    int uS = sonar.ping_cm();
-//    delay(50);
-//    while ((uS == 0) || (uS > 30)) {
-//       uS = sonar.ping_cm();
-//       delay(50);
-//    }
-//    Serial.println("Start dancing");
-// }
+void Minion::UltraSonicActivation() {
+   int uS = sonar.ping_cm();
+   delay(50);
+   while ((uS == 0) || (uS > 30)) {
+      uS = sonar.ping_cm();
+      delay(50);
+   }
+   Serial.println("Start dancing");
+}
 
 void Minion::pause(int interval){
     int uS = sonar.ping_cm();
     unsigned long currentMillis = millis();
+    int Colour = analogRead(LightSensorPin);
 
     while(currentMillis - previousMillis <= interval){
       currentMillis = millis();
       int uS = sonar.ping_cm();
+      int Colour = analogRead(LightSensorPin);
       if ((uS > 0) && (uS < 15)){
         RobotStop(20);
 
         while ((uS > 0) && (uS < 15)){
           uS = sonar.ping_cm();
-          delay(10);
+          delay(400);
+        }
+      } else {
+        if (Colour > 990){
+          RobotMoveBackCM(45);
         }
       }
      }
