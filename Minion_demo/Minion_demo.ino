@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //
 //  Minion_demo.ino - Demo minion
@@ -10,42 +10,63 @@
 //  14/06/2019 - Added comments
 //
 //
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <Minion.h>
 
 //             LHD, RHD, LHU, RHU, LHF, RHF, G_R ,  G_L , K_F     , K_B
 Minion minion1(460, 105, 120, 470, 270, 275, 1.70, -1.70, 1770/100, 1785/100);
-
-void setup() {
-  // put your setup code here, to run once:
+  
+void Demo (){
   minion1.start();
   delay(500);
-  RobotMoveForwardCM(30);
-  delay(1000);
-  UltraSonicActivation();
-  GyroTurnRightDegrees(90);
-  pause(500);
-  GyroTurnLeftDegrees(90);
-  delay(1000);
-  UltraSonicActivation();
-  RobotMoveForwardCM(50);
-  delay(1000);
-  UltraSonicActivation();
-  Start();
-  delay(1000);
-  UltraSonicActivation();
-  RobotMoveForwardCM(50);
-  GyroTurnLeftDegrees(90);
-  RobotMoveForwardCM(50);
-  GyroTurnLeftDegrees(90);
-  RobotMoveForwardCM(50);
-  GyroTurnLeftDegrees(90);
-  RobotMoveForwardCM(50);
-  GyroTurnLeftDegrees(90);
-  delay(1000);
+  minion1.RobotMoveForwardCM(50);
+  delay(500);
+  minion1.RobotStop(500);
+  minion1.pause(500);
+  minion1.UltraSonicActivation();
+  delay(500);
+  minion1.GyroTurnRightDegrees(90);
+  minion1.RobotStop(500);
+  minion1.GyroTurnLeftDegrees(90);
+  minion1.RobotStop(500);
+  minion1.UltraSonicActivation();
+  delay(500);
+  minion1.RobotMoveForwardCM(50);
+  minion1.pause(3000);
+  delay(1500);
+  minion1.RobotStop(500);
+  minion1.UltraSonicActivation();
+  delay(500);
+  minion1.start();
+  minion1.pause(500);
+  minion1.UltraSonicActivation();
+  delay(500);
+  minion1.RobotMoveForwardCM(100);
+  minion1.RobotStop(500);
+  minion1.GyroTurnLeftDegrees(45);
+  minion1.RobotStop(500);
+  minion1.RobotMoveForwardCM(100);
+  minion1.RobotStop(500);
+  minion1.GyroTurnLeftDegrees(45);
+  minion1.RobotStop(500);
+  minion1.RobotMoveForwardCM(100);
+  minion1.RobotStop(500);
+  minion1.GyroTurnLeftDegrees(45);
+  minion1.RobotStop(500);
+  minion1.RobotMoveForwardCM(100);
+  minion1.RobotStop(500);
+  minion1.GyroTurnLeftDegrees(45);
+  minion1.RobotStop(500);
+  minion1.pause(500);
+}
+void setup() {
+  // put your setup code here, to run once:
+   Demo();
   
   }
 
 void loop() {
+  // put your main code here, to run repeatedly:
+
 }
