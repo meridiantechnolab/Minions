@@ -138,20 +138,20 @@ void Happy() {
    delay(1000);
 
    // Final moves
-   minion1.RobotMoveForwardCM(35);
+   minion1.RobotMoveForwardCM(40);
    minion1.RobotStop(500);
    minion1.HandsUp();
    minion1.pause(500);
    minion1.HandsDown();
    minion1.pause(1000);
-   minion1.RobotMoveBackCM(85);
+   minion1.RobotMoveBackCM(50);
    minion1.RobotStop(500);
    delay(1000);
    minion1.HandsUp();
    delay(700);
    minion1.HandsDown();
    minion1.pause(1000);
-   minion1.RobotMoveForwardCM(60);
+   minion1.RobotMoveForwardCM(50);
    minion1.RobotStop(500);
    minion1.HandsUp();
    minion1.pause(500);
