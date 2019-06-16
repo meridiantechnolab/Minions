@@ -1,9 +1,24 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//
+//  LightShow.ino - Light show for Minions performance
+//
+//  ver. 1.5
+//  Last updated: 16/06/2019
+//
+//
+//  14/06/2019 - Added comments
+//
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #include <NewPing.h>
 
-#define PLACEHOLDER1 2
-#define PLACEHOLDER2 3
+#define TRIGGER_PIN 2
+#define ECHO_PIN 3
+#define MAX_DISTANCE 200
 
-NewPing sonar(PLACEHOLDER1, PLACEHOLDER2, 200);
+NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // UltraSonic sensor setup - pins and maximum distance
 
 int purple[] = {255, 0, 255};
 float beat = 60000 / 160;
@@ -109,8 +124,6 @@ void UltraSonicActivation() {
    }
    Serial.println("Start dancing");
 }
-
-
 
 void loop() {
   // put your main code here, to run repeatedly:
