@@ -68,7 +68,7 @@ void Happy() {
    minion2.pause(500);
    minion2.HandsDown();
    minion2.pause(500);
-   minion2.GyroTurnLeftDegrees(90);
+   minion2.GyroTurnRightDegrees(90);
    minion2.RobotStop(500);
    minion2.HandsUp();
    minion2.pause(500);
@@ -89,17 +89,17 @@ void Happy() {
    minion2.pause(500);
    minion2.LeftHandDown();
    minion2.pause(500);
-   minion2.GyroTurnRightDegrees(90);
+   minion2.GyroTurnLeftDegrees(90);
    minion2.RobotStop(500);
    minion2.RobotMoveBackCM(50);
    minion2.RobotStop(500);
-   minion2.GyroTurnRightDegrees(90);
+   minion2.GyroTurnLeftDegrees(90);
    minion2.RobotStop(100);
    //BluetoothActivation();
    delay(1200);
    minion2.HandsUp();
    minion2.pause(250);
-   minion2.GyroTurnRightDegrees(90);
+   minion2.GyroTurnLeftDegrees(90);
    minion2.RobotStop(500);
    minion2.HandsDown();
    //BluetoothActivation();
@@ -138,20 +138,20 @@ void Happy() {
    delay(1000);
 
    // Final moves
-   minion2.RobotMoveForwardCM(35);
+   minion2.RobotMoveBackCM(40);
    minion2.RobotStop(500);
    minion2.HandsUp();
    minion2.pause(500);
    minion2.HandsDown();
    minion2.pause(1000);
-   minion2.RobotMoveBackCM(85);
+   minion2.RobotMoveForwardCM(50);
    minion2.RobotStop(500);
    delay(1000);
    minion2.HandsUp();
    delay(700);
    minion2.HandsDown();
    minion2.pause(1000);
-   minion2.RobotMoveForwardCM(60);
+   minion2.RobotMoveBackCM(50);
    minion2.RobotStop(500);
    minion2.HandsUp();
    minion2.pause(500);
