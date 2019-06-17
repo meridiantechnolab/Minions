@@ -15,8 +15,8 @@
 
 #include <Minion.h>
 
-//             LHD, RHD, LHU, RHU, LHF, RHF, G_R ,  G_L , K_F     , K_B
-Minion minion2(450, 105, 150, 490, 300, 275, 1.70, -1.70, 1770/100, 1785/100);
+//             LHD, RHD, LHU, RHU, LHF, RHF, G_R ,  G_L , K_F     , K_B     , LC
+Minion minion2(450, 105, 150, 490, 300, 275, 1.70, -1.70, 1770/100, 1785/100, 990);
 
 void Hands() {
    minion2.HandsUp();
