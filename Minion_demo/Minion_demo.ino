@@ -20,6 +20,7 @@ Minion minion1(460, 105, 120, 470, 270, 275, 1.70, -1.70, 1770/100, 1785/100, 99
 void Demo (){
   //Init
   minion1.start();
+  minion1.UltraSonicActivation();
   delay(500);
 
   //Ultrasonic Activation
@@ -29,6 +30,7 @@ void Demo (){
   minion1.pause(500);
 
    //Gyro turning
+  minion1.UltraSonicActivation();
   minion1.UltraSonicActivation();
   delay(500);
   minion1.GyroTurnRightDegrees(90);
