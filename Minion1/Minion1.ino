@@ -85,6 +85,7 @@ void Happy() {
  
    minion1.start();
    IR_Activation();
+   delay(200);
 
    // Begining
    minion1.RobotMoveForwardCM(50);
