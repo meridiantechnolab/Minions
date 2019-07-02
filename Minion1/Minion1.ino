@@ -20,7 +20,7 @@
 int IR_RECV_PIN = 3;
 
 //             LHD, RHD, LHU, RHU, LHF, RHF, G_R ,  G_L , K_F     , K_B     , LC
-Minion minion1(460, 105, 120, 470, 270, 275, 1.70, -1.70, 1770/100, 1785/100);
+Minion minion1(460, 105, 120, 470, 270, 275, 1.70, -1.70, 1770/100, 1785/100, 990);
 
 void IR_Activation() {
   while (digitalRead(IR_RECV_PIN) == 1) {

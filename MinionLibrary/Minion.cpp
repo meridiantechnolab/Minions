@@ -45,7 +45,7 @@ float K_Backward;
 
 int LightCal;
 
-Minion::Minion(int _lHandDown, int _rHandDown, int _lHandUp, int _rHandUp, int _lHandForward, int _rHandForward, float _G_Right, float _G_Left, float _K_Forward, float _K_Backward, int _LightCal){
+Minion::Minion(int _lHandDown, int _rHandDown, int _lHandUp, int _rHandUp, int _lHandForward, int _rHandForward, float _G_Right, float _G_Left, float _K_Forward, float _K_Backward, int _LightCal) {
   lHandDown = _lHandDown;
   rHandDown = _rHandDown;
   lHandUp = _lHandUp;
@@ -91,7 +91,7 @@ void Minion::start(){
   //LED on saying that the robot is ready
   digitalWrite(LED_PIN, HIGH);
 
-  UltraSonicActivation();
+ // UltraSonicActivation();
 }
 
 void Minion::UltraSonicActivation() {
