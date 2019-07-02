@@ -83,6 +83,7 @@ void Hands() {
 
 void Happy() {
    minion2.start();
+   minion2.UltraSonicActivation();
    delay(500);
    IR_send();
 
