@@ -1,18 +1,3 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//  Minion.h - Library for dancing minions
-//
-//  ver. 1.1
-//  Last updated: 16/06/2019
-//
-//
-//  14/06/2019 - Added comments
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 #ifndef minion
 #define minion
 
@@ -27,7 +12,7 @@ class Minion {
   public:
 
 
-    Minion(int _lHandDown, int _rHandDown, int _lHandUp, int _rHandUp, int _lHandForward, int _rHandForward, float _G_Right, float _G_Left, float K_Forward, float K_Backward);
+    Minion(int _lHandDown, int _rHandDown, int _lHandUp, int _rHandUp, int _lHandForward, int _rHandForward, float _G_Right, float _G_Left, float K_Forward, float K_Backward, int _LightCal);
 
     void start();
 

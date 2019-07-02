@@ -1,18 +1,3 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//  Minion.cpp - Library for dancing minions
-//
-//  ver. 1.1
-//  Last updated: 16/06/2019
-//
-//
-//  14/06/2019 - Added comments
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 #include "Minion.h"
 #include <ServoDriver.h>
 #include <NewPing.h>
@@ -58,8 +43,9 @@ float G_Left;
 float K_Forward;
 float K_Backward;
 
+int LightCal;
 
-Minion::Minion(int _lHandDown, int _rHandDown, int _lHandUp, int _rHandUp, int _lHandForward, int _rHandForward, float _G_Right, float _G_Left, float _K_Forward, float _K_Backward){
+Minion::Minion(int _lHandDown, int _rHandDown, int _lHandUp, int _rHandUp, int _lHandForward, int _rHandForward, float _G_Right, float _G_Left, float _K_Forward, float _K_Backward, int _LightCal){
   lHandDown = _lHandDown;
   rHandDown = _rHandDown;
   lHandUp = _lHandUp;
@@ -71,6 +57,8 @@ Minion::Minion(int _lHandDown, int _rHandDown, int _lHandUp, int _rHandUp, int _
   G_Left = _G_Left;
   K_Forward = _K_Forward;
   K_Backward = _K_Backward;
+
+  LightCal = _LightCal;
 
 }
 
@@ -133,7 +121,7 @@ void Minion::pause(int interval){
           delay(400);
         }
       } else {
-        if (Colour > 990){
+        if (Colour > LightCal){
           RobotMoveBackCM(45);
         }
       }
