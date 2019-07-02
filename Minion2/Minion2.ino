@@ -1,12 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+//        
 //
 //  Minion2.ino - Dancing Minion 2
 //
-//  ver. 5.1
-//  Last updated: 16/06/2019
+//  ver. 5.2
+//  Last updated: 02/07/2019
 //
 //
+//  02/07/2019 - Added IR communication
 //  14/06/2019 - Added comments
 //
 //
@@ -14,9 +15,18 @@
 
 
 #include <Minion.h>
+#include <IRremote.h>
+ 
+IRsend irsend;
 
 //             LHD, RHD, LHU, RHU, LHF, RHF, G_R ,  G_L , K_F     , K_B     , LC
-Minion minion2(450, 105, 150, 490, 300, 275, 1.70, -1.70, 1770/100, 1785/100, 990);
+Minion minion2(450, 105, 150, 490, 300, 275, 1.70, -1.70, 1770/100, 1785/100);
+
+void IR_send() {
+   irsend.sendRC5(0x2, 8);
+   delay(100);
+   irsend.sendRC5(0x3, 8); 
+}
 
 void Hands() {
    minion2.HandsUp();
@@ -73,7 +83,8 @@ void Hands() {
 
 void Happy() {
    minion2.start();
-   delay(600);
+   delay(500);
+   IR_send();
 
    // Begining
    minion2.RobotMoveForwardCM(50);
@@ -228,7 +239,7 @@ void Happy() {
 }
 
 void setup() {
-  Happy();
+   Happy();
 }
 
 void loop(){

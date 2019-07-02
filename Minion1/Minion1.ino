@@ -3,10 +3,11 @@
 //
 //  Minion1.ino - Dancing Minion 1
 //
-//  ver. 5.1
-//  Last updated: 16/06/2019
+//  ver. 5.2
+//  Last updated: 02/07/2019
 //
 //
+//  02/07/2019 - Added IR communication
 //  14/06/2019 - Added comments
 //
 //
@@ -15,8 +16,17 @@
 
 #include <Minion.h>
 
+// IR
+int IR_RECV_PIN = 3;
+
 //             LHD, RHD, LHU, RHU, LHF, RHF, G_R ,  G_L , K_F     , K_B     , LC
-Minion minion1(460, 105, 120, 470, 270, 275, 1.70, -1.70, 1770/100, 1785/100, 990);
+Minion minion1(460, 105, 120, 470, 270, 275, 1.70, -1.70, 1770/100, 1785/100);
+
+void IR_Activation() {
+  while (digitalRead(IR_RECV_PIN) == 1) {
+  }  
+  Serial.println("IR Start dancing...");
+}
 
 void Hands() {
    minion1.HandsUp();
@@ -72,8 +82,9 @@ void Hands() {
 }
 
 void Happy() {
+ 
    minion1.start();
-   delay(600);
+   IR_Activation();
 
    // Begining
    minion1.RobotMoveForwardCM(50);
@@ -228,8 +239,10 @@ void Happy() {
 }
 
 void setup() {
-  Happy();
+   pinMode(IR_RECV_PIN, INPUT);
+   Happy();
 }
 
 void loop(){
 }
+
