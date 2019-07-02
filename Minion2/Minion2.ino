@@ -77,7 +77,7 @@ void Hands() {
       minion2.HandsDown();
       minion2.pause(800);
    }
-   minion2.GyroTurnRightDegrees(100);
+   minion2.GyroTurnRightDegrees(45);
    minion2.RobotStop(500);
 }
 
@@ -102,20 +102,21 @@ void Happy() {
    minion2.HandsDown();
    delay(500);
    minion2.RobotMoveForwardCM(30);
+   minion2.RobotMoveForwardCM(30);
    minion2.RobotStop(500);
    minion2.RightHandUp();
-   delay(300);
+   delay(400);
    minion2.LeftHandUp();
    minion2.RightHandDown();
-   delay(300);
+   delay(400);
    minion2.LeftHandDown();
    minion2.RightHandUp();
-   delay(300);
+   delay(400);
    minion2.LeftHandUp();
    minion2.RightHandDown();
-   delay(300);
+   delay(400);
    minion2.LeftHandDown();
-   delay(300);
+   delay(500);
    minion2.GyroTurnLeftDegrees(90);
    minion2.RobotStop(500);
    minion2.RobotMoveBackCM(50);
@@ -123,7 +124,7 @@ void Happy() {
    minion2.GyroTurnLeftDegrees(90);
    minion2.RobotStop(100);
    //BluetoothActivation();
-   delay(1200);
+   delay(900);
    minion2.HandsUp();
    delay(250);
    minion2.GyroTurnLeftDegrees(90);
@@ -131,7 +132,7 @@ void Happy() {
    minion2.HandsDown();
    //BluetoothActivation();
    delay(1000);
-   minion2.RobotMoveForwardCM(50);
+   minion2.RobotMoveForwardCM(100);
    delay(300);
    minion2.RobotStop(100);
    delay(500);
@@ -140,7 +141,7 @@ void Happy() {
    minion2.HandsDown();
    delay(500);
    minion2.RobotMoveBackCM(50);
-   delay(300);
+   minion2.RobotMoveBackCM(50);
    minion2.RobotStop(100);
    //BluetoothActivation();
    delay(1000);
@@ -166,22 +167,25 @@ void Happy() {
 
    // Final moves
    minion2.RobotMoveBackCM(40);
+   minion2.RobotMoveBackCM(40);
    minion2.RobotStop(500);
    minion2.HandsUp();
    delay(500);
    minion2.HandsDown();
    delay(1000);
-   minion2.RobotMoveForwardCM(50);
+   minion2.RobotMoveForwardCM(100);
+   minion2.RobotMoveForwardCM(100);
    minion2.RobotStop(500);
-   delay(1000);
+   delay(1500);
    minion2.HandsUp();
    delay(700);
    minion2.HandsDown();
    delay(1000);
    minion2.RobotMoveBackCM(50);
+   minion2.RobotMoveBackCM(50);
    minion2.RobotStop(500);
    minion2.HandsUp();
-   delay(500);
+   delay(1000);
    minion2.HandsDown();
    delay(1000);
    

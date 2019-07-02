@@ -62,7 +62,7 @@ void Hands() {
    minion1.pause(800);
 
    for (int j = 1; j <= 3; j++) {
-      minion1.GyroTurnRightDegrees(100);
+      minion1.GyroTurnRightDegrees(115);
       minion1.RobotStop(500);
       minion1.RightHandUp();
       minion1.pause(400);
@@ -77,7 +77,7 @@ void Hands() {
       minion1.HandsDown();
       minion1.pause(800);
    }
-   minion1.GyroTurnRightDegrees(100);
+   minion1.GyroTurnRightDegrees(45);
    minion1.RobotStop(500);
 }
 
@@ -92,30 +92,31 @@ void Happy() {
    minion1.RobotMoveForwardCM(50);
    minion1.RobotStop(500);
    minion1.HandsUp();
-   delay(500);
+   delay(400);
    minion1.HandsDown();
-   delay(500);
+   delay(400);
    minion1.GyroTurnLeftDegrees(90);
    minion1.RobotStop(500);
    minion1.HandsUp();
-   delay(500);
+   delay(400);
    minion1.HandsDown();
-   delay(500);
+   delay(400);
+   minion1.RobotMoveForwardCM(30);
    minion1.RobotMoveForwardCM(30);
    minion1.RobotStop(500);
    minion1.RightHandUp();
-   delay(500);
+   delay(400);
    minion1.LeftHandUp();
    minion1.RightHandDown();
-   delay(500);
+   delay(400);
    minion1.LeftHandDown();
    minion1.RightHandUp();
-   delay(500);
+   delay(400);
    minion1.LeftHandUp();
    minion1.RightHandDown();
-   delay(500);
+   delay(400);
    minion1.LeftHandDown();
-   delay(500);
+   delay(300);
    minion1.GyroTurnRightDegrees(90);
    minion1.RobotStop(500);
    minion1.RobotMoveBackCM(50);
@@ -123,15 +124,15 @@ void Happy() {
    minion1.GyroTurnRightDegrees(90);
    minion1.RobotStop(100);
    //BluetoothActivation();
-   delay(1200);
+   delay(700);
    minion1.HandsUp();
    delay(250);
    minion1.GyroTurnRightDegrees(90);
    minion1.RobotStop(500);
    minion1.HandsDown();
    //BluetoothActivation();
-   delay(1000);
-   minion1.RobotMoveForwardCM(50);
+   delay(700);
+   minion1.RobotMoveForwardCM(100);
    delay(300);
    minion1.RobotStop(100);
    delay(500);
@@ -140,7 +141,7 @@ void Happy() {
    minion1.HandsDown();
    delay(500);
    minion1.RobotMoveBackCM(50);
-   delay(300);
+   minion1.RobotMoveBackCM(50);
    minion1.RobotStop(100);
    //BluetoothActivation();
    delay(1000);
@@ -151,13 +152,13 @@ void Happy() {
    minion1.HandsDown();
    delay(500);
    minion1.GyroTurnRightDegrees(90);
-   minion1.RobotStop(1000);
+   minion1.RobotStop(800);
    minion1.HandsUp();
-   delay(500);
+   delay(400);
    minion1.HandsDown();
-   delay(500);
+   delay(400);
    minion1.GyroTurnRightDegrees(90);
-   minion1.RobotStop(500);
+   minion1.RobotStop(400);
 
    // Hands 23s
    Hands();
@@ -166,18 +167,21 @@ void Happy() {
 
    // Final moves
    minion1.RobotMoveForwardCM(40);
+   minion1.RobotMoveForwardCM(40);
    minion1.RobotStop(500);
    minion1.HandsUp();
    delay(500);
    minion1.HandsDown();
    delay(1000);
-   minion1.RobotMoveBackCM(50);
+   minion1.RobotMoveBackCM(100);
+   minion1.RobotMoveBackCM(100);
    minion1.RobotStop(500);
    delay(1000);
    minion1.HandsUp();
    delay(700);
    minion1.HandsDown();
    delay(1000);
+   minion1.RobotMoveForwardCM(50);
    minion1.RobotMoveForwardCM(50);
    minion1.RobotStop(500);
    minion1.HandsUp();
