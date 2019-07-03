@@ -243,6 +243,20 @@ void Happy() {
 
 void setup() {
    Happy();
+
+// Move Callibration
+   /*minion2.RobotMoveForwardCM(100);
+   delay(500);
+   minion2.RobotMoveBackCM(100);*/
+
+// Turn callibration
+   /*minion2.start();
+   minion2.GyroTurnRightDegrees(180);
+   delay(500);
+   minion2.GyroTurnLeftDegrees(180);*/
+
+//Colour Sensor
+  //Serial.println(analogRead(A0));
 }
 
 void loop(){

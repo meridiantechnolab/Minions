@@ -244,6 +244,18 @@ void Happy() {
 void setup() {
    pinMode(IR_RECV_PIN, INPUT);
    Happy();
+   
+   // Move Callibration
+   /*minion1.RobotMoveForwardCM(100);
+   delay(500);
+   minion1.RobotMoveBackCM(100);
+
+// Turn callibration
+   minion1.start();
+   minion1.GyroTurnRightDegrees(180);
+   delay(500);
+   minion1.GyroTurnLeftDegrees(180);*/
+
 }
 
 void loop(){
